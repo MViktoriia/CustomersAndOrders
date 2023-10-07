@@ -1,5 +1,7 @@
+import Dashboard from '../components/Dashboard';
+
 function DushboardPage() {
-  return <div>DushboardPage</div>;
+  return <Dashboard />;
 }
 
 export default DushboardPage;

@@ -9,7 +9,6 @@ function SidebarLink({ path, icon, label }) {
   const { pathname } = useLocation();
   const textColor =
     pathname === path ? 'text-white bg-neutral-700' : 'text-neutral-400';
-  console.log(textColor);
 
   return (
     <Link className={classNames(textColor, linkClasses)} to={path}>
