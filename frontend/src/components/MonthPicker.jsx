@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import classNames from 'classnames';
 
@@ -43,3 +44,11 @@ function MonthPicker({ className, month, year, onNextClick, onPrevClick }) {
 }
 
 export default MonthPicker;
+
+MonthPicker.propTypes = {
+  className: PropTypes.string,
+  month: PropTypes.number.isRequired,
+  year: PropTypes.number.isRequired,
+  onNextClick: PropTypes.func.isRequired,
+  onPrevClick: PropTypes.func.isRequired,
+};
