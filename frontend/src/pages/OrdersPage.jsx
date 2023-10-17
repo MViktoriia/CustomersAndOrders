@@ -1,12 +1,11 @@
 import AddButton from '../components/AddButton';
 import Table from '../components/Table';
 import odersData from '../../../config/db_orders.json';
-import { Link } from 'react-router-dom';
-import { getOrderStatus } from '../lib/utils/getOrderStatus';
-import { MdOutlineDeleteOutline, MdOutlineEdit } from 'react-icons/md';
+
 import MonthPicker from '../components/MonthPicker';
 import { useState } from 'react';
 import { getMonthFromString, getYearFromString } from '../lib/utils/formatDate';
+import OrderRow from '../components/OrderRow';
 
 function OrdersPage() {
   const odersHeaderInfo = [
@@ -59,29 +58,21 @@ function OrdersPage() {
               getYearFromString(item.date) === year
           )
           .map(order => (
-            <tr key={order.id}>
-              <td>{new Date(order.date).toLocaleDateString()}</td>
-              <td>{order.product_name}</td>
-              <td>
-                <Link to={`/customer/${order.customer_id}`}>
-                  {order.customer}
-                </Link>
-              </td>
-              <td>{order.hours}</td>
-              <td>{order.sum}</td>
-              <td>{order.comment}</td>
-              <td>{getOrderStatus(order.work_status)}</td>
-              <td>{getOrderStatus(order.payment_status)}</td>
-              <td>
-                <MdOutlineEdit />
-              </td>
-              <td>
-                <MdOutlineDeleteOutline />
-              </td>
-            </tr>
+            <OrderRow
+              key={order.id}
+              date={order.date}
+              productName={order.product_name}
+              customerId={order.customer_id}
+              customer={order.customer}
+              hours={order.hours}
+              sum={order.sum}
+              comment={order.comment}
+              workStatus={order.work_status}
+              paymentStatus={order.payment_status}
+            />
           ))}
       </Table>
-      <AddButton onClick={() => console.log('Click')} btnClass="mt-4">
+      <AddButton onClick={() => console.log('Click')} className="mt-2">
         New Order
       </AddButton>
     </>
