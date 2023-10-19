@@ -1,11 +1,21 @@
 import AddButton from '../components/AddButton';
 import Table from '../components/Table';
-import odersData from '../../../config/db_orders.json';
-
 import MonthPicker from '../components/MonthPicker';
 import { useState } from 'react';
-import { getMonthFromString, getYearFromString } from '../lib/utils/formatDate';
+import {
+  formatDate,
+  getMonthFromString,
+  getYearFromString,
+} from '../lib/utils/formatDate';
 import OrderRow from '../components/OrderRow';
+import { createPortal } from 'react-dom';
+import Modal from '../components/Modal';
+import OrderForm from '../components/OrdersForm';
+import { nanoid } from 'nanoid';
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrder } from '../redux/orders/ordersSlice';
+import { getCustomers } from '../redux/customers/customersSelectors';
+import { getOrders } from '../redux/orders/ordersSelectors';
 
 function OrdersPage() {
   const odersHeaderInfo = [
@@ -21,9 +31,17 @@ function OrdersPage() {
     'Delete',
   ];
 
-  const date = new Date();
-  const [month, setMonth] = useState(date.getMonth());
-  const [year, setYear] = useState(date.getFullYear());
+  const dispatch = useDispatch();
+
+  const customersData = useSelector(getCustomers);
+  const ordersData = useSelector(getOrders);
+
+  const currentDate = new Date();
+  const date = formatDate(currentDate);
+  const [month, setMonth] = useState(currentDate.getMonth());
+  const [year, setYear] = useState(currentDate.getFullYear());
+  const [isModalShown, setIsModalshown] = useState(false);
+  const [newOrderId, setNewOrderId] = useState('');
 
   const onNextMonth = () => {
     if (month == 11) {
@@ -41,6 +59,28 @@ function OrdersPage() {
     setMonth(prev => prev - 1);
   };
 
+  const handleAddButtonClick = () => {
+    const id = nanoid();
+
+    setNewOrderId(id);
+
+    setIsModalshown(true);
+    const newOrder = {
+      id,
+      date,
+      productName: 'photo',
+      customerId: '',
+      customerName: '',
+      hours: '',
+      sum: '',
+      comment: '',
+      workStatus: '',
+      paymentStatus: '',
+    };
+
+    dispatch(addOrder(newOrder));
+  };
+
   return (
     <>
       <MonthPicker
@@ -51,7 +91,7 @@ function OrdersPage() {
         className="mb-4"
       />
       <Table title={'Orders'} tableHeadData={odersHeaderInfo}>
-        {odersData
+        {ordersData
           .filter(
             item =>
               getMonthFromString(item.date) === month &&
@@ -60,21 +100,48 @@ function OrdersPage() {
           .map(order => (
             <OrderRow
               key={order.id}
+              id={order.id}
               date={order.date}
-              productName={order.product_name}
-              customerId={order.customer_id}
-              customer={order.customer}
+              productName={order.productName}
+              customerId={order.customerId}
+              customer={
+                customersData.find(customer => customer.id === order.customerId)
+                  ?.name ?? ''
+              }
               hours={order.hours}
               sum={order.sum}
               comment={order.comment}
-              workStatus={order.work_status}
-              paymentStatus={order.payment_status}
+              workStatus={order.workStatus}
+              paymentStatus={order.paymentStatus}
             />
           ))}
       </Table>
-      <AddButton onClick={() => console.log('Click')} className="mt-2">
+      <AddButton onClick={handleAddButtonClick} className="mt-2">
         New Order
       </AddButton>
+      {isModalShown &&
+        createPortal(
+          <Modal onClose={() => setIsModalshown(false)}>
+            <OrderForm
+              setIsModalOpen={setIsModalshown}
+              orderData={{
+                id: newOrderId,
+                date,
+                productName: '',
+                customerId: '',
+                customerName: '',
+                hours: '',
+                sum: '',
+                comment: '',
+                workStatus: '',
+                paymentStatus: '',
+              }}
+              customersData={customersData}
+              isEdit={false}
+            />
+          </Modal>,
+          document.body
+        )}
     </>
   );
 }

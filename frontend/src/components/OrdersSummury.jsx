@@ -3,8 +3,9 @@ import Table from './Table';
 
 function OrdersSummury() {
   const categories = [
-    { id: '1', name: 'foto' },
+    { id: '1', name: 'photo' },
     { id: '2', name: 'video' },
+    { id: '2', name: 'photo & video' },
   ];
   const summuryHeaders = [
     'Category',
@@ -22,13 +23,13 @@ function OrdersSummury() {
           <td>{category.name}</td>
           <td>
             {
-              ordersData.filter(order => order.product_name === category.name)
+              ordersData.filter(order => order.productName === category.name)
                 .length
             }
           </td>
           <td>
             {ordersData
-              .filter(order => order.product_name === category.name)
+              .filter(order => order.productName === category.name)
               .map(catOrder => +catOrder.sum)
               .reduce((acc, prevVal) => acc + prevVal, 0)}
           </td>
@@ -36,8 +37,8 @@ function OrdersSummury() {
             {
               ordersData.filter(
                 order =>
-                  order.product_name === category.name &&
-                  order.work_status === 'done'
+                  order.productName === category.name &&
+                  order.workStatus === 'done'
               ).length
             }
           </td>
@@ -45,8 +46,8 @@ function OrdersSummury() {
             {
               ordersData.filter(
                 order =>
-                  order.product_name === category.name &&
-                  order.work_status === 'in progress'
+                  order.productName === category.name &&
+                  order.workStatus === 'in progress'
               ).length
             }
           </td>
@@ -54,8 +55,8 @@ function OrdersSummury() {
             {
               ordersData.filter(
                 order =>
-                  order.product_name === category.name &&
-                  order.payment_status === 'paid'
+                  order.productName === category.name &&
+                  order.paymentStatus === 'paid'
               ).length
             }
           </td>
@@ -63,8 +64,8 @@ function OrdersSummury() {
             {
               ordersData.filter(
                 order =>
-                  order.product_name === category.name &&
-                  order.payment_status === 'unpaid'
+                  order.productName === category.name &&
+                  order.paymentStatus === 'unpaid'
               ).length
             }
           </td>

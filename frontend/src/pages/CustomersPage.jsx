@@ -1,5 +1,4 @@
 import Table from '../components/Table';
-import ordersData from '../../../config/db_orders.json';
 import AddButton from '../components/AddButton';
 import CustomersRow from '../components/CustomersRow';
 import { useState } from 'react';
@@ -11,11 +10,13 @@ import { getCustomers } from '../redux/customers/customersSelectors';
 import { nanoid } from 'nanoid';
 import { addCustomer } from '../redux/customers/customersSlice';
 import { createPortal } from 'react-dom';
+import { getOrders } from '../redux/orders/ordersSelectors';
 
 function CustomersPage() {
   const dispatch = useDispatch();
 
   const customers = useSelector(getCustomers);
+  const ordersData = useSelector(getOrders);
   const [isModalShown, setIsModalshown] = useState(false);
   const [newCustomerId, setNewCustomerId] = useState('');
 

@@ -60,7 +60,9 @@ function CustomersRow({
         <td>{country}</td>
         <td>{info}</td>
         <td>
-          <MdOutlineEdit fontSize={20} onClick={handleEditClick} />
+          <button onClick={handleEditClick}>
+            <MdOutlineEdit fontSize={20} />
+          </button>
         </td>
         <td>
           <button onClick={() => handleDeleteClick(id)}>
