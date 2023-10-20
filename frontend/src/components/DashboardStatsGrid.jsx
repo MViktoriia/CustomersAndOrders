@@ -1,7 +1,16 @@
-import { IoBagHandle } from 'react-icons/io5';
 import PropTypes from 'prop-types';
+import { IoBagHandle } from 'react-icons/io5';
 
-function DashboardStatsGrid() {
+function DashboardStatsGrid({
+  totalSales,
+  changeInSales,
+  totalExpenses,
+  changeInExpenses,
+  totalCustomers,
+  changeInCustomers,
+  totalOrders,
+  changeInOrders,
+}) {
   return (
     <div className="flex gap-4">
       <BoxWrapper>
@@ -9,10 +18,14 @@ function DashboardStatsGrid() {
           <IoBagHandle className="text-2xl text-white" />
         </div>
         <div className="pl-4">
-          <p className="text-sm text-gray-500 font-light">Total sale</p>
+          <p className="text-sm text-gray-500 font-light">Total sales</p>
           <div className="flex items-center">
-            <p className="text-xl text-gray-700 font-semibold ">12345$</p>
-            <p className="text-sm text-green-500 pl-2">+546</p>
+            <p className="text-xl text-gray-700 font-semibold ">{totalSales}</p>
+            {changeInSales >= 0 ? (
+              <p className="text-sm text-green-500 pl-2">+{changeInSales}</p>
+            ) : (
+              <p className="text-sm text-red-500 pl-2">{changeInSales}</p>
+            )}
           </div>
         </div>
       </BoxWrapper>
@@ -21,10 +34,16 @@ function DashboardStatsGrid() {
           <IoBagHandle className="text-2xl text-white" />
         </div>
         <div className="pl-4">
-          <p className="text-sm text-gray-500 font-light">Total sale</p>
+          <p className="text-sm text-gray-500 font-light">Total expenses</p>
           <div className="flex items-center">
-            <p className="text-xl text-gray-700 font-semibold ">12345$</p>
-            <p className="text-sm text-green-500 pl-2">+546</p>
+            <p className="text-xl text-gray-700 font-semibold ">
+              {totalExpenses ?? 0}
+            </p>
+            {changeInExpenses >= 0 ? (
+              <p className="text-sm text-green-500 pl-2">+{changeInExpenses}</p>
+            ) : (
+              <p className="text-sm text-red-500 pl-2">{changeInExpenses}</p>
+            )}
           </div>
         </div>
       </BoxWrapper>
@@ -33,10 +52,18 @@ function DashboardStatsGrid() {
           <IoBagHandle className="text-2xl text-white" />
         </div>
         <div className="pl-4">
-          <p className="text-sm text-gray-500 font-light">Total sale</p>
+          <p className="text-sm text-gray-500 font-light">Total customers</p>
           <div className="flex items-center">
-            <p className="text-xl text-gray-700 font-semibold ">12345$</p>
-            <p className="text-sm text-green-500 pl-2">+546</p>
+            <p className="text-xl text-gray-700 font-semibold ">
+              {totalCustomers ?? 0}
+            </p>
+            {changeInCustomers >= 0 ? (
+              <p className="text-sm text-green-500 pl-2">
+                +{changeInCustomers}
+              </p>
+            ) : (
+              <p className="text-sm text-red-500 pl-2">{changeInCustomers}</p>
+            )}
           </div>
         </div>
       </BoxWrapper>
@@ -45,10 +72,16 @@ function DashboardStatsGrid() {
           <IoBagHandle className="text-2xl text-white" />
         </div>
         <div className="pl-4">
-          <p className="text-sm text-gray-500 font-light">Total sale</p>
+          <p className="text-sm text-gray-500 font-light">Total orders</p>
           <div className="flex items-center">
-            <p className="text-xl text-gray-700 font-semibold ">12345$</p>
-            <p className="text-sm text-green-500 pl-2">+546</p>
+            <p className="text-xl text-gray-700 font-semibold ">
+              {totalOrders ?? 0}
+            </p>
+            {changeInOrders >= 0 ? (
+              <p className="text-sm text-green-500 pl-2">+{changeInOrders}</p>
+            ) : (
+              <p className="text-sm text-red-500 pl-2">{changeInOrders}</p>
+            )}
           </div>
         </div>
       </BoxWrapper>
@@ -57,6 +90,17 @@ function DashboardStatsGrid() {
 }
 
 export default DashboardStatsGrid;
+
+DashboardStatsGrid.propTypes = {
+  totalSales: PropTypes.number.isRequired,
+  changeInSales: PropTypes.number.isRequired,
+  totalExpenses: PropTypes.number,
+  changeInExpenses: PropTypes.number,
+  totalCustomers: PropTypes.number,
+  changeInCustomers: PropTypes.number,
+  totalOrders: PropTypes.number,
+  changeInOrders: PropTypes.number,
+};
 
 function BoxWrapper({ children }) {
   return (
