@@ -2,24 +2,24 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import AddButton from './AddButton';
 import { useDispatch } from 'react-redux';
-import {
-  editCustomer,
-  removeCustomer,
-} from '../redux/customers/customersSlice';
+// import { editCustomer } from '../redux/customers/customersSlice';
 import SecondaryButton from './SecondaryButton';
+import { addCustomer } from '../redux/customers/customersOperations';
 
-function CustomerForm({ customerData, setIsModalOpen, isEdit }) {
+function CustomerForm({ id, setIsModalOpen, isEdit }) {
   const disputch = useDispatch();
   const [formData, setFormData] = useState({
-    name: customerData.name,
-    birthday: customerData.birthday,
-    source: customerData.source,
-    email: customerData.email,
-    phone: customerData.phone,
-    website: customerData.website,
-    country: customerData.country,
-    info: customerData.info,
+    name: '',
+    birthday: '',
+    source: 'instagram',
+    email: '',
+    phone: '',
+    website: '',
+    country: '',
+    info: '',
   });
+
+  console.log(formData);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -28,20 +28,23 @@ function CustomerForm({ customerData, setIsModalOpen, isEdit }) {
 
   const handleCancelClick = event => {
     event.preventDefault();
-    if (!isEdit) {
-      disputch(removeCustomer(customerData.id));
-    }
     setIsModalOpen(false);
   };
 
   const onFormSubmit = event => {
     event.preventDefault();
-    const editedCustomer = {
-      id: customerData.id,
-      ...formData,
-    };
-    console.log(editedCustomer);
-    disputch(editCustomer(editedCustomer));
+    if (isEdit) {
+      const editedCustomer = {
+        _id: id,
+        ...formData,
+      };
+      console.log(editedCustomer);
+      // disputch(editCustomer(editedCustomer));
+      return;
+    }
+
+    const newCustomer = { ...formData };
+    disputch(addCustomer(newCustomer));
     setIsModalOpen(false);
   };
 
@@ -208,17 +211,7 @@ function CustomerForm({ customerData, setIsModalOpen, isEdit }) {
 export default CustomerForm;
 
 CustomerForm.propTypes = {
-  customerData: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    birthday: PropTypes.string.isRequired,
-    source: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
-    website: PropTypes.string.isRequired,
-    country: PropTypes.string.isRequired,
-    info: PropTypes.string.isRequired,
-  }),
+  id: PropTypes.string,
   setIsModalOpen: PropTypes.func.isRequired,
   isEdit: PropTypes.bool,
 };

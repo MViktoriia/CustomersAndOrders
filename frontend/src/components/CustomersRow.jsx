@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { MdOutlineDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-import { removeCustomer } from '../redux/customers/customersSlice';
+// import { removeCustomer } from '../redux/customers/customersSlice';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import Modal from './Modal';
@@ -27,7 +27,7 @@ function CustomersRow({
   };
 
   const handleDeleteClick = id => {
-    console.log(dispatch(removeCustomer(id)));
+    // console.log(dispatch(removeCustomer(id)));
   };
 
   return (

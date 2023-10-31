@@ -1,16 +1,15 @@
 import Table from '../components/Table';
 import AddButton from '../components/AddButton';
 import CustomersRow from '../components/CustomersRow';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from '../components/Modal';
 import CustomerForm from '../components/CustomerForm';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getCustomers } from '../redux/customers/customersSelectors';
-import { nanoid } from 'nanoid';
-import { addCustomer } from '../redux/customers/customersSlice';
 import { createPortal } from 'react-dom';
 import { getOrders } from '../redux/orders/ordersSelectors';
+import { fetchCustomers } from '../redux/customers/customersOperations';
 
 function CustomersPage() {
   const dispatch = useDispatch();
@@ -18,7 +17,6 @@ function CustomersPage() {
   const customers = useSelector(getCustomers);
   const ordersData = useSelector(getOrders);
   const [isModalShown, setIsModalshown] = useState(false);
-  const [newCustomerId, setNewCustomerId] = useState('');
 
   const headerItems = [
     'Customer',
@@ -33,24 +31,13 @@ function CustomersPage() {
     'Delete',
   ];
 
-  const handleAddButtonClick = () => {
-    const id = nanoid();
-    setNewCustomerId(id);
+  useEffect(() => {
+    const action = fetchCustomers();
+    dispatch(action);
+  }, [dispatch]);
 
+  const handleAddButtonClick = () => {
     setIsModalshown(true);
-    const newCustomer = {
-      id: id,
-      name: '',
-      birthday: '',
-      source: 'instagram',
-      email: '',
-      phone: '',
-      website: '',
-      country: '',
-      info: '',
-    };
-    console.log(newCustomer);
-    dispatch(addCustomer(newCustomer));
   };
 
   return (
@@ -58,8 +45,8 @@ function CustomersPage() {
       <Table title={'Customers'} tableHeadData={headerItems}>
         {customers.map(customer => (
           <CustomersRow
-            key={customer.id}
-            id={customer.id}
+            key={customer._id}
+            id={customer._id}
             name={customer.name}
             birthday={customer.birthday}
             source={customer.source}
@@ -81,17 +68,16 @@ function CustomersPage() {
           <Modal onClose={() => setIsModalshown(false)}>
             <CustomerForm
               setIsModalOpen={setIsModalshown}
-              customerData={{
-                id: newCustomerId,
-                name: '',
-                birthday: '',
-                source: 'instagram',
-                email: '',
-                phone: '',
-                website: '',
-                country: '',
-                info: '',
-              }}
+              // customerData={{
+              //   name: '',
+              //   birthday: '',
+              //   source: 'instagram',
+              //   email: '',
+              //   phone: '',
+              //   website: '',
+              //   country: '',
+              //   info: '',
+              // }}
               isEdit={false}
             />
           </Modal>,
