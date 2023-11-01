@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv');
 const customersRouter = require('./routes/api/customers');
+const ordersRouter = require('./routes/api/orders');
 
 // load config
 const configPath = path.join(__dirname, '..', 'config', '.env');
@@ -22,6 +23,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/customers', customersRouter);
+app.use('/api/orders', ordersRouter);
 
 //Middlewares error?
 app.use((req, res) => {
