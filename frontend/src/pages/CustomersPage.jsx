@@ -68,16 +68,14 @@ function CustomersPage() {
           <Modal onClose={() => setIsModalshown(false)}>
             <CustomerForm
               setIsModalOpen={setIsModalshown}
-              // customerData={{
-              //   name: '',
-              //   birthday: '',
-              //   source: 'instagram',
-              //   email: '',
-              //   phone: '',
-              //   website: '',
-              //   country: '',
-              //   info: '',
-              // }}
+              name=""
+              birthday=""
+              source=""
+              email=""
+              phone=""
+              website=""
+              country=""
+              info=""
               isEdit={false}
             />
           </Modal>,

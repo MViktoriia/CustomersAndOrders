@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { MdOutlineDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
-// import { removeCustomer } from '../redux/customers/customersSlice';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import Modal from './Modal';
 import CustomerForm from './CustomerForm';
+import { deleteCustomer } from '../redux/customers/customersOperations';
 
 function CustomersRow({
   id,
@@ -20,6 +20,7 @@ function CustomersRow({
   info,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const handleEditClick = () => {
@@ -27,7 +28,7 @@ function CustomersRow({
   };
 
   const handleDeleteClick = id => {
-    // console.log(dispatch(removeCustomer(id)));
+    dispatch(deleteCustomer(id));
   };
 
   return (
@@ -78,17 +79,15 @@ function CustomersRow({
             }}
           >
             <CustomerForm
-              customerData={{
-                id,
-                name,
-                birthday,
-                source,
-                email,
-                phone,
-                website,
-                country,
-                info,
-              }}
+              id={id}
+              name={name}
+              birthday={birthday}
+              source={source}
+              email={email}
+              phone={phone}
+              website={website}
+              country={country}
+              info={info}
               setIsModalOpen={setIsModalOpen}
               isEdit={true}
             />

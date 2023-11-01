@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 // import customersData from '../../../../config/db_customers.json';
-import { fetchCustomers, addCustomer } from './customersOperations';
+import {
+  fetchCustomers,
+  addCustomer,
+  editCustomer,
+  deleteCustomer,
+} from './customersOperations';
 
 const initialState = {
   list: [],
@@ -29,6 +34,7 @@ const customersSlice = createSlice({
       state.error = null;
     });
     builder.addCase(addCustomer.fulfilled, (state, { payload }) => {
+      console.log(state.list);
       state.list.push(payload);
       state.isLoading = false;
     });
@@ -36,37 +42,46 @@ const customersSlice = createSlice({
       state.isLoading = false;
       state.error = payload;
     });
-  },
-  // reducers: {
-  //   addCustomer(state, { payload }) {
-  //     state.list.push({
-  //       id: payload.id,
-  //       name: payload.name,
-  //       birthday: payload.birthday,
-  //       source: payload.source,
-  //       email: payload.email,
-  //       phone: payload.phone,
-  //       website: payload.website,
-  //       country: payload.country,
-  //       info: payload.info,
-  //     });
-  //   },
-  //   editCustomer(state, { payload }) {
-  //     const editedCustomer = state.list.find(
-  //       customer => customer.id === payload.id
-  //     );
+    builder.addCase(editCustomer.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(editCustomer.fulfilled, (state, { payload }) => {
+      const editedCustomer = state.list.find(
+        customer => customer._id === payload._id
+      );
 
-  //     if (editedCustomer) {
-  //       editedCustomer.name = payload.name;
-  //       editedCustomer.birthday = payload.birthday;
-  //       editedCustomer.source = payload.source;
-  //       editedCustomer.email = payload.email;
-  //       editedCustomer.phone = payload.phone;
-  //       editedCustomer.website = payload.website;
-  //       editedCustomer.country = payload.country;
-  //       editedCustomer.info = payload.info;
-  //     }
-  //   },
+      if (editedCustomer) {
+        editedCustomer.name = payload.name;
+        editedCustomer.birthday = payload.birthday;
+        editedCustomer.source = payload.source;
+        editedCustomer.email = payload.email;
+        editedCustomer.phone = payload.phone;
+        editedCustomer.website = payload.website;
+        editedCustomer.country = payload.country;
+        editedCustomer.info = payload.info;
+      }
+
+      state.isLoading = false;
+    });
+    builder.addCase(editCustomer.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(deleteCustomer.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteCustomer.fulfilled, (state, { payload }) => {
+      state.list = state.list.filter(customer => customer._id !== payload);
+      state.isLoading = false;
+    });
+    builder.addCase(deleteCustomer.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
+  },
+
   //   removeCustomer(state, { payload }) {
   //     state.list = state.list.filter(customer => customer.id !== payload);
   //   },

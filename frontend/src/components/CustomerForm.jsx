@@ -2,24 +2,36 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import AddButton from './AddButton';
 import { useDispatch } from 'react-redux';
-// import { editCustomer } from '../redux/customers/customersSlice';
 import SecondaryButton from './SecondaryButton';
-import { addCustomer } from '../redux/customers/customersOperations';
+import {
+  addCustomer,
+  editCustomer,
+} from '../redux/customers/customersOperations';
 
-function CustomerForm({ id, setIsModalOpen, isEdit }) {
+function CustomerForm({
+  id,
+  name,
+  birthday,
+  source,
+  email,
+  phone,
+  website,
+  country,
+  info,
+  setIsModalOpen,
+  isEdit,
+}) {
   const disputch = useDispatch();
   const [formData, setFormData] = useState({
-    name: '',
-    birthday: '',
-    source: 'instagram',
-    email: '',
-    phone: '',
-    website: '',
-    country: '',
-    info: '',
+    name,
+    birthday,
+    source,
+    email,
+    phone,
+    website,
+    country,
+    info,
   });
-
-  console.log(formData);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -39,7 +51,8 @@ function CustomerForm({ id, setIsModalOpen, isEdit }) {
         ...formData,
       };
       console.log(editedCustomer);
-      // disputch(editCustomer(editedCustomer));
+      disputch(editCustomer(editedCustomer));
+      setIsModalOpen(false);
       return;
     }
 
@@ -212,6 +225,14 @@ export default CustomerForm;
 
 CustomerForm.propTypes = {
   id: PropTypes.string,
+  name: PropTypes.string,
+  birthday: PropTypes.string,
+  source: PropTypes.string,
+  email: PropTypes.string,
+  phone: PropTypes.string,
+  website: PropTypes.string,
+  country: PropTypes.string,
+  info: PropTypes.string,
   setIsModalOpen: PropTypes.func.isRequired,
   isEdit: PropTypes.bool,
 };
