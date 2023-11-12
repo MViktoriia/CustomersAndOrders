@@ -1,5 +1,6 @@
-import ordersData from '../../../config/db_orders.json';
+import { useSelector } from 'react-redux';
 import Table from './Table';
+import { getOrders } from '../redux/orders/ordersSelectors';
 
 function OrdersSummury() {
   const categories = [
@@ -16,6 +17,7 @@ function OrdersSummury() {
     'Amount of paid',
     'Amount of unpaid',
   ];
+  const ordersData = useSelector(getOrders);
   return (
     <Table title={'Orders Summury'} tableHeadData={summuryHeaders}>
       {categories.map(category => (

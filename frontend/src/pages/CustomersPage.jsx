@@ -10,6 +10,7 @@ import { getCustomers } from '../redux/customers/customersSelectors';
 import { createPortal } from 'react-dom';
 import { getOrders } from '../redux/orders/ordersSelectors';
 import { fetchCustomers } from '../redux/customers/customersOperations';
+import { fetchOrders } from '../redux/orders/ordersOperations';
 
 function CustomersPage() {
   const dispatch = useDispatch();
@@ -32,8 +33,8 @@ function CustomersPage() {
   ];
 
   useEffect(() => {
-    const action = fetchCustomers();
-    dispatch(action);
+    dispatch(fetchCustomers());
+    dispatch(fetchOrders());
   }, [dispatch]);
 
   const handleAddButtonClick = () => {

@@ -37,13 +37,13 @@ function CustomersRow({
         <td>{name}</td>
         <td>
           {ordersData
-            .filter(order => order.customer_id === id)
+            .filter(order => order.customer === id)
             .map(order => +order.hours)
             .reduce((acc, curVal) => acc + curVal, 0)}
         </td>
         <td>
           {ordersData
-            .filter(order => order.customer_id === id)
+            .filter(order => order.customer === id)
             .map(order => +order.sum)
             .reduce((acc, curVal) => acc + curVal, 0)}
         </td>

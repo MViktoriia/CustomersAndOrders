@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
+import { MdOutlineDeleteOutline, MdOutlineEdit } from 'react-icons/md';
+import { createPortal } from 'react-dom';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getOrderStatus } from '../lib/utils/getOrderStatus';
-import { MdOutlineDeleteOutline, MdOutlineEdit } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { removeOrder } from '../redux/orders/ordersSlice';
-import { createPortal } from 'react-dom';
 import Modal from './Modal';
 import OrderForm from './OrdersForm';
-import { useState } from 'react';
+//redux
+import { useDispatch, useSelector } from 'react-redux';
 import { getCustomers } from '../redux/customers/customersSelectors';
+import { deleteOrder } from '../redux/orders/ordersOperations';
 
 function OrderRow({
   id,
   date,
   productName,
-  customerId,
   customer,
   hours,
   sum,
@@ -26,13 +26,15 @@ function OrderRow({
   const dispatch = useDispatch();
 
   const customersData = useSelector(getCustomers);
+  const customerName =
+    customersData.find(item => item._id === customer)?.name ?? '';
 
   const handleEditClick = () => {
     setIsModalOpen(true);
   };
 
   const handleDeleteClick = id => {
-    console.log(dispatch(removeOrder(id)));
+    dispatch(deleteOrder(id));
   };
 
   return (
@@ -41,7 +43,7 @@ function OrderRow({
         <td>{new Date(date).toLocaleDateString()}</td>
         <td>{productName}</td>
         <td>
-          <Link to={`/customer/${customerId}`}>{customer}</Link>
+          <Link to={`/customer/${customer}`}>{customerName}</Link>
         </td>
         <td>{hours}</td>
         <td>{sum}</td>
@@ -68,20 +70,16 @@ function OrderRow({
           >
             <OrderForm
               setIsModalOpen={setIsModalOpen}
-              orderData={{
-                id,
-                date,
-                productName,
-                customerId,
-                customerName: customer,
-                hours,
-                sum,
-                comment,
-                workStatus,
-                paymentStatus,
-              }}
-              customersData={customersData}
-              isEdit={false}
+              id={id}
+              date={date}
+              productName={productName}
+              customer={customer}
+              hours={hours}
+              sum={sum}
+              comment={comment}
+              workStatus={workStatus}
+              paymentStatus={paymentStatus}
+              isEdit={true}
             />
           </Modal>,
           document.body
@@ -96,7 +94,6 @@ OrderRow.propTypes = {
   id: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   productName: PropTypes.string.isRequired,
-  customerId: PropTypes.string.isRequired,
   customer: PropTypes.string.isRequired,
   hours: PropTypes.string.isRequired,
   sum: PropTypes.string.isRequired,

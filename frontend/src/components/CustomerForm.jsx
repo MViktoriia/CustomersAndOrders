@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import AddButton from './AddButton';
 import { useDispatch } from 'react-redux';
+import AddButton from './AddButton';
 import SecondaryButton from './SecondaryButton';
 import {
   addCustomer,
@@ -50,7 +50,7 @@ function CustomerForm({
         _id: id,
         ...formData,
       };
-      console.log(editedCustomer);
+
       disputch(editCustomer(editedCustomer));
       setIsModalOpen(false);
       return;

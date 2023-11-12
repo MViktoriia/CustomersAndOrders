@@ -1,8 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import ordersData from '../../../../config/db_orders.json';
+import {
+  addOrder,
+  deleteOrder,
+  editOrder,
+  fetchOrders,
+} from './ordersOperations';
 
 const initialState = {
-  list: ordersData,
+  list: [],
   isLoading: false,
   error: null,
 };
@@ -10,41 +15,67 @@ const initialState = {
 const ordersSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {
-    addOrder(state, { payload }) {
-      state.list.push({
-        id: payload.id,
-        date: payload.date,
-        productName: payload.productName,
-        customerId: payload.customerId,
-        customerName: payload.customerName,
-        hours: payload.hours,
-        sum: payload.sum,
-        comment: payload.comment,
-        workStatus: payload.workStatus,
-        paymentStatus: payload.paymentStatus,
-      });
-    },
-    editOrder(state, { payload }) {
-      const editedOrder = state.list.find(order => order.id === payload.id);
-
+  extraReducers: builder => {
+    builder.addCase(fetchOrders.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchOrders.fulfilled, (state, { payload }) => {
+      state.list = payload;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchOrders.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(addOrder.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(addOrder.fulfilled, (state, { payload }) => {
+      state.list.push(payload);
+      state.isLoading = false;
+    });
+    builder.addCase(addOrder.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(editOrder.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(editOrder.fulfilled, (state, { payload }) => {
+      const editedOrder = state.list.find(order => order._id === payload._id);
       if (editedOrder) {
         editedOrder.date = payload.date;
-        editedOrder.productName = payload.productName;
-        editedOrder.customerId = payload.customerId;
-        editedOrder.customerName = payload.customerName;
         editedOrder.hours = payload.hours;
+        editedOrder.productName = payload.productName;
+        editedOrder.customer = payload.customer;
         editedOrder.sum = payload.sum;
-        editedOrder.comment = payload.comment;
         editedOrder.workStatus = payload.workStatus;
         editedOrder.paymentStatus = payload.paymentStatus;
+        editedOrder.comment = payload.comment;
       }
-    },
-    removeOrder(state, { payload }) {
-      state.list = state.list.filter(order => order.id !== payload);
-    },
+      state.isLoading = false;
+    });
+    builder.addCase(editOrder.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
+    builder.addCase(deleteOrder.pending, state => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteOrder.fulfilled, (state, { payload }) => {
+      state.list = state.list.filter(order => order._id !== payload);
+      state.isLoading = false;
+    });
+    builder.addCase(deleteOrder.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    });
   },
 });
 
 export default ordersSlice.reducer;
-export const { addOrder, editOrder, removeOrder } = ordersSlice.actions;
+// export const { addOrder, editOrder, removeOrder } = ordersSlice.actions;

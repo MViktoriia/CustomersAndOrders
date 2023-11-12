@@ -1,7 +1,7 @@
 import AddButton from '../components/AddButton';
 import Table from '../components/Table';
 import MonthPicker from '../components/MonthPicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   formatDate,
   getMonthFromString,
@@ -11,11 +11,10 @@ import OrderRow from '../components/OrderRow';
 import { createPortal } from 'react-dom';
 import Modal from '../components/Modal';
 import OrderForm from '../components/OrdersForm';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addOrder } from '../redux/orders/ordersSlice';
-import { getCustomers } from '../redux/customers/customersSelectors';
 import { getOrders } from '../redux/orders/ordersSelectors';
+import { fetchOrders } from '../redux/orders/ordersOperations';
+import { fetchCustomers } from '../redux/customers/customersOperations';
 
 function OrdersPage() {
   const odersHeaderInfo = [
@@ -33,7 +32,6 @@ function OrdersPage() {
 
   const dispatch = useDispatch();
 
-  const customersData = useSelector(getCustomers);
   const ordersData = useSelector(getOrders);
 
   const currentDate = new Date();
@@ -41,7 +39,6 @@ function OrdersPage() {
   const [month, setMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
   const [isModalShown, setIsModalshown] = useState(false);
-  const [newOrderId, setNewOrderId] = useState('');
 
   const onNextMonth = () => {
     if (month == 11) {
@@ -59,26 +56,13 @@ function OrdersPage() {
     setMonth(prev => prev - 1);
   };
 
+  useEffect(() => {
+    dispatch(fetchCustomers());
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
   const handleAddButtonClick = () => {
-    const id = nanoid();
-
-    setNewOrderId(id);
-
     setIsModalshown(true);
-    const newOrder = {
-      id,
-      date,
-      productName: 'photo',
-      customerId: '',
-      customerName: '',
-      hours: '',
-      sum: '',
-      comment: '',
-      workStatus: '',
-      paymentStatus: '',
-    };
-
-    dispatch(addOrder(newOrder));
   };
 
   return (
@@ -99,15 +83,11 @@ function OrdersPage() {
           )
           .map(order => (
             <OrderRow
-              key={order.id}
-              id={order.id}
+              key={order._id}
+              id={order._id}
               date={order.date}
               productName={order.productName}
-              customerId={order.customerId}
-              customer={
-                customersData.find(customer => customer.id === order.customerId)
-                  ?.name ?? ''
-              }
+              customer={order.customer}
               hours={order.hours}
               sum={order.sum}
               comment={order.comment}
@@ -124,19 +104,14 @@ function OrdersPage() {
           <Modal onClose={() => setIsModalshown(false)}>
             <OrderForm
               setIsModalOpen={setIsModalshown}
-              orderData={{
-                id: newOrderId,
-                date,
-                productName: '',
-                customerId: '',
-                customerName: '',
-                hours: '',
-                sum: '',
-                comment: '',
-                workStatus: '',
-                paymentStatus: '',
-              }}
-              customersData={customersData}
+              date={date}
+              productName="photo"
+              customer="65390e5242301605bbf8330d"
+              hours=""
+              sum=""
+              comment=""
+              workStatus="done"
+              paymentStatus="paid"
               isEdit={false}
             />
           </Modal>,

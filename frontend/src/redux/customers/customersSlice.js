@@ -34,7 +34,6 @@ const customersSlice = createSlice({
       state.error = null;
     });
     builder.addCase(addCustomer.fulfilled, (state, { payload }) => {
-      console.log(state.list);
       state.list.push(payload);
       state.isLoading = false;
     });
@@ -81,11 +80,6 @@ const customersSlice = createSlice({
       state.error = payload;
     });
   },
-
-  //   removeCustomer(state, { payload }) {
-  //     state.list = state.list.filter(customer => customer.id !== payload);
-  //   },
-  // },
 });
 
 export default customersSlice.reducer;

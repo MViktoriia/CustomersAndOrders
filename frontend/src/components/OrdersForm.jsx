@@ -1,47 +1,64 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import AddButton from './AddButton';
-import { useDispatch } from 'react-redux';
-import { editOrder, removeOrder } from '../redux/orders/ordersSlice';
-import SecondaryButton from './SecondaryButton';
+import { useDispatch, useSelector } from 'react-redux';
 
-function OrderForm({ orderData, customersData, setIsModalOpen, isEdit }) {
+import SecondaryButton from './SecondaryButton';
+import { addOrder, editOrder } from '../redux/orders/ordersOperations';
+import { getCustomers } from '../redux/customers/customersSelectors';
+
+function OrderForm({
+  id,
+  date,
+  productName,
+  customer,
+  hours,
+  sum,
+  comment,
+  workStatus,
+  paymentStatus,
+  setIsModalOpen,
+  isEdit,
+}) {
+  const customersData = useSelector(getCustomers);
   const disputch = useDispatch();
   const [formData, setFormData] = useState({
-    date: orderData.date,
-    productName: orderData.productName,
-    customerId: orderData.customerId,
-    customerName: orderData.customerName,
-    hours: orderData.hours,
-    sum: orderData.sum,
-    comment: orderData.comment,
-    workStatus: orderData.workStatus,
-    paymentStatus: orderData.paymentStatus,
+    date,
+    productName,
+    customer,
+    hours,
+    sum,
+    comment,
+    workStatus,
+    paymentStatus,
   });
-
-  console.log(formData);
 
   const handleChange = event => {
     const { name, value } = event.target;
+    console.log('name:', name, 'value:', value);
     setFormData(prevFormData => ({ ...prevFormData, [name]: value }));
   };
 
   const handleCancelClick = event => {
     event.preventDefault();
-    if (!isEdit) {
-      disputch(removeOrder(orderData.id));
-    }
+
     setIsModalOpen(false);
   };
 
   const onFormSubmit = event => {
     event.preventDefault();
-    const editedOrder = {
-      id: orderData.id,
-      ...formData,
-    };
+    if (isEdit) {
+      const editedOrder = {
+        _id: id,
+        ...formData,
+      };
+      disputch(editOrder(editedOrder));
+      setIsModalOpen(false);
+      return;
+    }
+    const newOrder = { ...formData };
+    disputch(addOrder(newOrder));
 
-    disputch(editOrder(editedOrder));
     setIsModalOpen(false);
   };
 
@@ -91,13 +108,13 @@ function OrderForm({ orderData, customersData, setIsModalOpen, isEdit }) {
           <select
             id="customer"
             className="block rounded-t-lg py-2.5 px-2.5 w-full text-sm text-gray-900 bg-gray-50 border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            name="customerId"
-            value={formData.customerId}
+            name="customer"
+            value={formData.customer}
             onChange={handleChange}
           >
-            {customersData.map(customer => (
-              <option key={customer.id} value={customer.id}>
-                {customer.name}
+            {customersData.map(customerItem => (
+              <option key={customerItem._id} value={customerItem._id}>
+                {customerItem.name}
               </option>
             ))}
           </select>
@@ -147,7 +164,7 @@ function OrderForm({ orderData, customersData, setIsModalOpen, isEdit }) {
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Additional information about order..."
             name="comment"
-            value={formData.info}
+            value={formData.comment}
             onChange={handleChange}
           ></textarea>
         </div>
@@ -208,19 +225,15 @@ function OrderForm({ orderData, customersData, setIsModalOpen, isEdit }) {
 export default OrderForm;
 
 OrderForm.propTypes = {
-  orderData: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    productName: PropTypes.string.isRequired,
-    customerId: PropTypes.string.isRequired,
-    customerName: PropTypes.string.isRequired,
-    hours: PropTypes.string.isRequired,
-    sum: PropTypes.string.isRequired,
-    comment: PropTypes.string.isRequired,
-    workStatus: PropTypes.string.isRequired,
-    paymentStatus: PropTypes.string.isRequired,
-  }),
-  customersData: PropTypes.array.isRequired,
+  id: PropTypes.string,
+  date: PropTypes.string.isRequired,
+  productName: PropTypes.string.isRequired,
+  customer: PropTypes.string.isRequired,
+  hours: PropTypes.string.isRequired,
+  sum: PropTypes.string.isRequired,
+  comment: PropTypes.string.isRequired,
+  workStatus: PropTypes.string.isRequired,
+  paymentStatus: PropTypes.string.isRequired,
   setIsModalOpen: PropTypes.func.isRequired,
   isEdit: PropTypes.bool,
 };
