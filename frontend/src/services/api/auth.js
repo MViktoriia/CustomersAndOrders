@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000/api/';
+const BASE_URL = 'https://customers-orders-backend.onrender.com/api/';
 
 export const instance = axios.create({
   baseURL: BASE_URL,
