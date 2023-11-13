@@ -1,11 +1,20 @@
 import DashboardStatsGrid from '../components/DashboardStatsGrid';
 import OrdersSummury from '../components/OrdersSummury';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../redux/orders/ordersSelectors';
 import { getCustomers } from '../redux/customers/customersSelectors';
 import { getMonthFromString, getYearFromString } from '../lib/utils/formatDate';
+import { useEffect } from 'react';
+import { fetchCustomers } from '../redux/customers/customersOperations';
+import { fetchOrders } from '../redux/orders/ordersOperations';
 
 function DushboardPage() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCustomers());
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
   const orders = useSelector(getOrders);
   const customers = useSelector(getCustomers);
 
