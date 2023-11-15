@@ -26,16 +26,14 @@ app.use('/api/customers', customersRouter);
 app.use('/api/orders', ordersRouter);
 
 //Midleware redirect to index path
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
-const indexPath = path.resolve(
-  __dirname,
-  '..',
-  'frontend',
-  'dist',
-  'index.html'
-);
+app.use(express.static('dist'));
+const indexPath = path.join(__dirname, 'dist', 'index.html');
 app.get('/customers', (req, res) => res.sendFile(indexPath));
 app.get('/orders', (req, res) => res.sendFile(indexPath));
+
+app.get('*', (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' });
+});
 
 //Middlewares error route
 app.use((req, res) => {
