@@ -27,5 +27,5 @@ export const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: 'customers-orders' }
+  { basename: '/' }
 );
