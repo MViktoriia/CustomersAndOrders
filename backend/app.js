@@ -25,7 +25,19 @@ app.use(express.json());
 app.use('/api/customers', customersRouter);
 app.use('/api/orders', ordersRouter);
 
-//Middlewares error?
+//Midleware redirect to index path
+app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
+const indexPath = path.resolve(
+  __dirname,
+  '..',
+  'frontend',
+  'dist',
+  'index.html'
+);
+app.get('/customers', (req, res) => res.sendFile(indexPath));
+app.get('/orders', (req, res) => res.sendFile(indexPath));
+
+//Middlewares error route
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
