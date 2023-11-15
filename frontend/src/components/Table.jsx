@@ -5,9 +5,9 @@ function Table({ tableHeadData, title, children }) {
   return (
     <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
       <h2 className="text-gray-700 font-medium">{title}</h2>
-      <div className="mt-3">
+      <div className="mt-3 max-h-60 overflow-scroll">
         <table className="w-full text-gray-700">
-          <thead>
+          <thead className="sticky top-0">
             <tr>
               {tableHeadData.map(item => (
                 <th key={nanoid()}>{item}</th>
