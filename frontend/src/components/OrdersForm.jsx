@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import AddButton from './AddButton';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { categories } from '../lib/consts/productCategories';
 import SecondaryButton from './SecondaryButton';
 import { addOrder, editOrder } from '../redux/orders/ordersOperations';
 import { getCustomers } from '../redux/customers/customersSelectors';
@@ -57,6 +57,7 @@ function OrderForm({
       return;
     }
     const newOrder = { ...formData };
+    console.log(newOrder);
     disputch(addOrder(newOrder));
 
     setIsModalOpen(false);
@@ -95,10 +96,11 @@ function OrderForm({
             value={formData.productName}
             onChange={handleChange}
           >
-            <option value="photo">Photo</option>
-            <option value="video">Video</option>
-            <option value="photoAndVideo">Photo and Video</option>
-            <option value="other">Other</option>
+            {categories.map(category => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
 

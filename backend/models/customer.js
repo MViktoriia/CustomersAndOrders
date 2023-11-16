@@ -10,7 +10,7 @@ const customerSchema = new Schema(
     birthday: String,
     source: {
       type: String,
-      emum: ['instagram', 'friends', 'website'],
+      emum: ['instagram', 'friends', 'website', 'other'],
     },
     email: String,
     phone: String,

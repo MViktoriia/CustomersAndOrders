@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AddButton from './AddButton';
 import SecondaryButton from './SecondaryButton';
+import { customerSource } from '../lib/consts/customerSource';
 import {
   addCustomer,
   editCustomer,
@@ -111,9 +112,11 @@ function CustomerForm({
             value={formData.source}
             onChange={handleChange}
           >
-            <option value="instagram">Instagram</option>
-            <option value="friends">Friends</option>
-            <option value="website">Website</option>
+            {customerSource.map(source => (
+              <option key={source.id} value={source.name}>
+                {source.name}
+              </option>
+            ))}
           </select>
         </div>
 

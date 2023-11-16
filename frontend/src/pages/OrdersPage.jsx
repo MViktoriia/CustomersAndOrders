@@ -105,7 +105,7 @@ function OrdersPage() {
             <OrderForm
               setIsModalOpen={setIsModalshown}
               date={date}
-              productName="photo"
+              productName="Photo"
               customer="65390e5242301605bbf8330d"
               hours=""
               sum=""

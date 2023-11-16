@@ -1,14 +1,9 @@
 import { useSelector } from 'react-redux';
 import Table from './Table';
 import { getOrders } from '../redux/orders/ordersSelectors';
+import { categories } from '../lib/consts/productCategories';
 
 function OrdersSummury() {
-  const categories = [
-    { id: '1', name: 'photo' },
-    { id: '2', name: 'video' },
-    { id: '3', name: 'photo & video' },
-    { id: '4', name: 'other' },
-  ];
   const summuryHeaders = [
     'Category',
     'Amount of orders',

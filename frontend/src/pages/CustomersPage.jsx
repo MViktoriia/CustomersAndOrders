@@ -71,7 +71,7 @@ function CustomersPage() {
               setIsModalOpen={setIsModalshown}
               name=""
               birthday=""
-              source=""
+              source="instagram"
               email=""
               phone=""
               website=""
