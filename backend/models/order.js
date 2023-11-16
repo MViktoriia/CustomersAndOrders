@@ -5,7 +5,7 @@ const orderSchema = new Schema(
     date: String,
     productName: {
       type: String,
-      emum: ['Photo', 'Video', 'Photo and Video'],
+      emum: ['Photo', 'Video', 'Photo and Video', 'Other'],
     },
     customer: {
       type: Schema.Types.ObjectId,

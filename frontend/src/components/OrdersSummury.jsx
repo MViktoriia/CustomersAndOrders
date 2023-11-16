@@ -6,7 +6,8 @@ function OrdersSummury() {
   const categories = [
     { id: '1', name: 'photo' },
     { id: '2', name: 'video' },
-    { id: '2', name: 'photo & video' },
+    { id: '3', name: 'photo & video' },
+    { id: '4', name: 'other' },
   ];
   const summuryHeaders = [
     'Category',

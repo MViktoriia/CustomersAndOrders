@@ -98,6 +98,7 @@ function OrderForm({
             <option value="photo">Photo</option>
             <option value="video">Video</option>
             <option value="photoAndVideo">Photo and Video</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
