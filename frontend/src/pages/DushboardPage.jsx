@@ -3,10 +3,12 @@ import OrdersSummury from '../components/OrdersSummury';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../redux/orders/ordersSelectors';
 import { getCustomers } from '../redux/customers/customersSelectors';
-import { getMonthFromString, getYearFromString } from '../lib/utils/formatDate';
 import { useEffect } from 'react';
 import { fetchCustomers } from '../redux/customers/customersOperations';
 import { fetchOrders } from '../redux/orders/ordersOperations';
+import TransactionChart from '../components/TransactionChart';
+import { getSumByYear } from '../lib/utils/getsumByMonths';
+import CustomerSourcePieChart from '../components/CustomerSourcePieChart';
 
 function DushboardPage() {
   const dispatch = useDispatch();
@@ -18,43 +20,30 @@ function DushboardPage() {
   const orders = useSelector(getOrders);
   const customers = useSelector(getCustomers);
 
-  const curDate = new Date();
-  const curMonth = curDate.getMonth();
-  const prevMonth = curMonth - 1;
-  const curYear = curDate.getFullYear();
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
 
-  const totalSalesCurMonth = orders
-    .filter(
-      item =>
-        getMonthFromString(item.date) === curMonth &&
-        getYearFromString(item.date) === curYear
-    )
-    .map(order => order.sum)
-    .reduce((prevVal, curVal) => Number(prevVal) + Number(curVal), 0);
-
-  const totalSalesPrevMonth = orders
-    .filter(
-      item =>
-        getMonthFromString(item.date) === prevMonth &&
-        getYearFromString(item.date) === curYear
-    )
-    .map(order => order.sum)
-    .reduce((prevVal, curVal) => Number(prevVal) + Number(curVal), 0);
+  const totalSalesCurrentYear = getSumByYear(currentYear, orders);
+  const totalSalesPreviouseYear = getSumByYear(currentYear - 1, orders);
 
   const totalCustomers = customers.length;
-
   const totalOrders = orders.length;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-full">
       <DashboardStatsGrid
-        totalSales={totalSalesCurMonth}
-        changeInSales={totalSalesCurMonth - totalSalesPrevMonth}
+        totalSales={totalSalesCurrentYear}
+        changeInSales={totalSalesCurrentYear - totalSalesPreviouseYear}
         totalCustomers={totalCustomers}
         totalOrders={totalOrders}
       />
       <div className="flex flex-row gap-4 w-full">
-        <OrdersSummury />
+        <TransactionChart />
+        <CustomerSourcePieChart />
+      </div>
+
+      <div className="flex flex-row gap-4 w-full">
+        <OrdersSummury title={'Orders summary - Year info'} />
       </div>
     </div>
   );

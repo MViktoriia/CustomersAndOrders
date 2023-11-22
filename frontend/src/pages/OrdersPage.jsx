@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../redux/orders/ordersSelectors';
 import { fetchOrders } from '../redux/orders/ordersOperations';
 import { fetchCustomers } from '../redux/customers/customersOperations';
+import DashboardStatsGrid from '../components/DashboardStatsGrid';
+import { getSumByMonth } from '../lib/utils/getsumByMonths';
 
 function OrdersPage() {
   const odersHeaderInfo = [
@@ -32,6 +34,11 @@ function OrdersPage() {
 
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchCustomers());
+    dispatch(fetchOrders());
+  }, [dispatch]);
+
   const ordersData = useSelector(getOrders);
 
   const currentDate = new Date();
@@ -39,6 +46,8 @@ function OrdersPage() {
   const [month, setMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
   const [isModalShown, setIsModalshown] = useState(false);
+
+  const monthSales = getSumByMonth(month, year, ordersData) || ' 0';
 
   const onNextMonth = () => {
     if (month == 11) {
@@ -56,24 +65,22 @@ function OrdersPage() {
     setMonth(prev => prev - 1);
   };
 
-  useEffect(() => {
-    dispatch(fetchCustomers());
-    dispatch(fetchOrders());
-  }, [dispatch]);
-
   const handleAddButtonClick = () => {
     setIsModalshown(true);
   };
 
   return (
     <>
-      <MonthPicker
-        onNextClick={onNextMonth}
-        onPrevClick={onPrevMonth}
-        month={month}
-        year={year}
-        className="mb-4"
-      />
+      <div className="flex justify-between items-center mb-2">
+        <MonthPicker
+          onNextClick={onNextMonth}
+          onPrevClick={onPrevMonth}
+          month={month}
+          year={year}
+          className=""
+        />
+        <DashboardStatsGrid totalSales={monthSales} />
+      </div>
       <Table title={'Orders'} tableHeadData={odersHeaderInfo}>
         {ordersData
           .filter(

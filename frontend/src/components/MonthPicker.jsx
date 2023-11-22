@@ -1,27 +1,13 @@
 import PropTypes from 'prop-types';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import classNames from 'classnames';
+import { months } from '../lib/consts/months';
 
 function MonthPicker({ className, month, year, onNextClick, onPrevClick }) {
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
   return (
     <div
       className={classNames(
-        'flex justify-items-center items-center bg-white px-3 py-2 rounded-sm border border-gray-200 w-fit',
+        'flex justify-items-center items-center bg-white px-3 py-2 rounded-sm border border-gray-200 w-fit h-full',
         className
       )}
     >
@@ -31,7 +17,7 @@ function MonthPicker({ className, month, year, onNextClick, onPrevClick }) {
       >
         <AiOutlineLeft fontSize={20} />
       </div>
-      <p className="mr-2">{`${months[month]} ${year}`}</p>
+      <p className="mr-2 w-36 flex justify-center">{`${months[month]} ${year}`}</p>
 
       <div
         onClick={onNextClick}

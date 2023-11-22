@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import Table from './Table';
 import { getOrders } from '../redux/orders/ordersSelectors';
 import { categories } from '../lib/consts/productCategories';
 
-function OrdersSummury() {
+function OrdersSummury({ title }) {
   const summuryHeaders = [
     'Category',
     'Amount of orders',
@@ -15,7 +16,7 @@ function OrdersSummury() {
   ];
   const ordersData = useSelector(getOrders);
   return (
-    <Table title={'Orders Summury'} tableHeadData={summuryHeaders}>
+    <Table title={title} tableHeadData={summuryHeaders}>
       {categories.map(category => (
         <tr key={category.name}>
           <td>{category.name}</td>
@@ -74,3 +75,7 @@ function OrdersSummury() {
 }
 
 export default OrdersSummury;
+
+OrdersSummury.propTypes = {
+  title: PropTypes.string,
+};
