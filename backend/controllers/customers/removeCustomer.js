@@ -1,4 +1,4 @@
-const Customer = require('../../models/customer');
+const { Customer } = require('../../models/customer');
 const { HttpError } = require('../../helpers');
 
 const removeCustomer = async (req, res, next) => {

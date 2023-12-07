@@ -5,6 +5,7 @@ const path = require('path');
 const dotenv = require('dotenv');
 const customersRouter = require('./routes/api/customers');
 const ordersRouter = require('./routes/api/orders');
+const authRouter = require('./routes/api/auth');
 
 // load config
 const configPath = path.join(__dirname, '..', 'config', '.env');
@@ -22,10 +23,11 @@ app.use(cors());
 app.use(express.json());
 
 //Routes
+app.use('/api/auth', authRouter);
 app.use('/api/customers', customersRouter);
 app.use('/api/orders', ordersRouter);
 
-// //Midleware serving static files and handle client-side routing
+// //Midleware serving static files and handle client-side routing(not working for unknown reason)
 // app.use(express.static(path.join(__dirname, '..', 'frontend', 'dist')));
 // const indexPath = path.join(__dirname, '..', 'frontend', 'dist', 'index.html');
 // app.get('/customers', (req, res) => res.sendFile(indexPath));

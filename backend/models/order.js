@@ -1,11 +1,13 @@
 const { Schema, model } = require('mongoose');
+const Joi = require('joi');
 
 const orderSchema = new Schema(
   {
-    date: String,
+    date: { type: String, required: true },
     productName: {
       type: String,
       emum: ['Photo', 'Video', 'Photo & Video', 'Other'],
+      required: true,
     },
     customer: {
       type: Schema.Types.ObjectId,
@@ -23,4 +25,21 @@ const orderSchema = new Schema(
 
 const Order = model('order', orderSchema);
 
-module.exports = Order;
+// Joi schema
+const addSchema = Joi.object({
+  date: Joi.string().required(),
+  productName: Joi.string()
+    .valid('Photo', 'Video', 'Photo & Video', 'Other')
+    .required(),
+  customer: Joi.string().required(),
+  hours: Joi.string().allow(''),
+  sum: Joi.string().allow(''),
+  comment: Joi.string().allow(''),
+  workStatus: Joi.string().valid('Done', 'In Progress'),
+  paymentStatus: Joi.string().valid('Paid', 'Unpaid'),
+});
+
+module.exports = {
+  addSchema,
+  Order,
+};

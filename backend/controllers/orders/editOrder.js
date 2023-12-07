@@ -1,5 +1,5 @@
 const { HttpError } = require('../../helpers');
-const Order = require('../../models/order');
+const { Order } = require('../../models/order');
 
 const editOrder = async (req, res, next) => {
   const { orderId } = req.params;

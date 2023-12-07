@@ -1,4 +1,4 @@
-const Customer = require('../../models/customer');
+const { Customer } = require('../../models/customer');
 
 const addCustomer = async (req, res, next) => {
   const result = await Customer.create(req.body);

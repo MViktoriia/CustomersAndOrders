@@ -3,9 +3,9 @@ const { connect } = require('mongoose');
 
 const app = require('./app');
 
-const { DB_HOST, PORT } = process.env;
+const { MONGO_DB, PORT } = process.env;
 
-connect(process.env.MONGO_DB)
+connect(MONGO_DB)
   .then(() => {
     console.log(`MongoDB is connected`.cyan.bold.italic);
     app.listen(PORT, () => {
