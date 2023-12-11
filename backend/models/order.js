@@ -17,8 +17,8 @@ const orderSchema = new Schema(
     hours: String,
     sum: String,
     comment: String,
-    workStatus: { type: String, emum: ['Done', 'In Progress'] },
-    paymentStatus: { type: String, emum: ['Paid', 'Unpaid'] },
+    workStatus: { type: String, emum: ['done', 'inProgress'] },
+    paymentStatus: { type: String, emum: ['paid', 'unpaid'] },
   },
   { versionKey: false, timestamps: true }
 );
@@ -35,8 +35,8 @@ const addSchema = Joi.object({
   hours: Joi.string().allow(''),
   sum: Joi.string().allow(''),
   comment: Joi.string().allow(''),
-  workStatus: Joi.string().valid('Done', 'In Progress'),
-  paymentStatus: Joi.string().valid('Paid', 'Unpaid'),
+  workStatus: Joi.string().valid('done', 'inProgress'),
+  paymentStatus: Joi.string().valid('paid', 'unpaid'),
 });
 
 module.exports = {
