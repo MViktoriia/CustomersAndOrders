@@ -17,7 +17,17 @@ export const addNewOrder = async data => {
 
 export const updateOrder = async data => {
   const { _id } = data;
-  const { data: result } = await instance.put(`/orders/${_id}`, data);
+  const updatedData = {
+    date: data.date,
+    hours: data.hours,
+    productName: data.productName,
+    customer: data.customer,
+    sum: data.sum,
+    workStatus: data.workStatus,
+    paymentStatus: data.paymentStatus,
+    comment: data.comment,
+  };
+  const { data: result } = await instance.put(`/orders/${_id}`, updatedData);
   return result;
 };
 
