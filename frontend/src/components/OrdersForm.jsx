@@ -196,6 +196,7 @@ function OrderForm({
             value={formData.workStatus}
             onChange={handleChange}
           >
+            <option value="booked">Booked</option>
             <option value="done">Done</option>
             <option value="inProgress">In Progress</option>
           </select>
